@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIUMPH AUTO IMPORT | Авто зі США під ключ</title>
+	<link rel="stylesheet" href="style.css">
+  <script src="scripts.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css">
+
+</head>
+<body>
+<script>
+// gallery navigation and improved thumbnail behavior
+(function(){
+  const overlay = document.getElementById('carModalOverlay');
+  if (!overlay) return;
+  const mainImg = document.getElementById('carModalMainImg');
+  const thumbs = document.getElementById('carModalThumbs');
+
+  // create image nav buttons if not present
+  function ensureImgNav() {
+    const wrap = mainImg.closest('.main-image-wrap') || (() => {
+      const w = document.createElement('div');
+      w.className = 'main-image-wrap';
+      mainImg.parentNode.insertBefore(w, mainImg);
+      w.appendChild(mainImg);
+      return w;
+    })();
+
+    // avoid duplicates
+    if (wrap.querySelector('.img-nav')) return wrap.querySelector('.img-nav');
+
+    const nav = document.createElement('div');
+    nav.className = 'img-nav';
+    nav.innerHTML = `
+      <button type="button" class="nav-prev" aria-label="Попереднє"><i class="bi bi-chevron-left"></i></button>
+      <button type="button" class="nav-next" aria-label="Наступне"><i class="bi bi-chevron-right"></i></button>
+    `;
+    wrap.appendChild(nav);
+    return nav;
+  }
+
+  // operate on current thumbs to navigate
+  function setupNavEvents() {
+    const nav = ensureImgNav();
+    const btnPrev = nav.querySelector('.nav-prev');
+    const btnNext = nav.querySelector('.nav-next');
+
+    btnPrev.addEventListener('click', () => {
+      const imgs = Array.from(thumbs.querySelectorAll('img'));
+      if (!imgs.length) return;
+      const active = thumbs.querySelector('img.active') || imgs[0];
+      const idx = imgs.indexOf(active);
+      const prev = imgs[(idx - 1 + imgs.length) % imgs.length];
+      prev.click();
+      prev.scrollIntoView({behavior:'smooth', inline:'nearest'});
+    });
+    btnNext.addEventListener('click', () => {
+      const imgs = Array.from(thumbs.querySelectorAll('img'));
+      if (!imgs.length) return;
+      const active = thumbs.querySelector('img.active') || imgs[0];
+      const idx = imgs.indexOf(active);
+      const next = imgs[(idx + 1) % imgs.length];
+      next.click();
+      next.scrollIntoView({behavior:'smooth', inline:'nearest'});
+    });
+  }
+
+  // rewire when modal opens: add nav + keyboard left/right support
+  const observer = new MutationObserver(() => {
+    if (overlay.classList.contains('open')) {
+      setupNavEvents();
+      // keyboard navigation for thumbnails
+      document.addEventListener('keydown', thumbKeyHandler);
+    } else {
+      document.removeEventListener('keydown', thumbKeyHandler);
+    }
+  });
+  observer.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  function thumbKeyHandler(e) {
+    if (e.key === 'ArrowLeft') {
+      const p = thumbs.querySelector('img.active')?.previousElementSibling || thumbs.querySelector('img:last-child');
+      if (p) p.click();
+    }
+    if (e.key === 'ArrowRight') {
+      const n = thumbs.querySelector('img.active')?.nextElementSibling || thumbs.querySelector('img:first-child');
+      if (n) n.click();
+    }
+  }
+
+  // ensure thumbnails click behavior also sets focus + tiny scale effect
+  const origAppendThumb = thumbs.appendChild;
+  // not overriding appendChild globally; but just ensure existing thumbs have pointer cursor (CSS already) — no further change needed
+})();
+</script>
+
+<!-- ===== Enhanced Car Modal (add before </body>) ===== -->
+<!-- SVG sprite for icons -->
+<svg style="display:none;" aria-hidden="true">
+  <symbol id="icon-calendar" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10h5v5H7z"/><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM5 20V9h14v11H5z"/></symbol>
+  <symbol id="icon-gas" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2v11h10V2H7zm8 9H9V4h6v7z"/><path fill="currentColor" d="M20.39 18.56L18 16.17V4h-2v12.17l-2.39 2.39c-.37.37-.61.88-.61 1.43V21h9v1.97c0-.55-.24-1.06-.61-1.44z"/></symbol>
+  <symbol id="icon-mileage" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-9 9h2a7 7 0 1 1 14 0h2a9 9 0 0 0-9-9z"/><path fill="currentColor" d="M11 11h2v6h-2z"/></symbol>
+  <symbol id="icon-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M19.14,12.94a7.12,7.12,0,0,0,.06-1,7.12,7.12,0,0,0-.06-1l2.11-1.65a.5.5,0,0,0,.12-.64l-2-3.46a.5.5,0,0,0-.6-.22l-2.49,1a7.07,7.07,0,0,0-1.73-1L14.5,2.5a.5.5,0,0,0-.5-.5H10a.5.5,0,0,0-.5.5L9,4.13a7.07,7.07,0,0,0-1.73,1l-2.49-1a.5.5,0,0,0-.6.22L1.14,7a.5.5,0,0,0,.12.64L3.37,9.29a7.12,7.12,0,0,0-.06,1,7.12,7.12,0,0,0,.06,1L1.26,13.94a.5.5,0,0,0-.12.64l2,3.46a.5.5,0,0,0,.6.22l2.49-1a7.07,7.07,0,0,0,1.73,1L9.5,21.5a.5.5,0,0,0,.5.5h4a.5.5,0,0,0,.5-.5l.77-2.63a7.07,7.07,0,0,0,1.73-1l2.49,1a.5.5,0,0,0,.6-.22l2-3.46a.5.5,0,0,0-.12-.64Z"/></symbol>
+  <symbol id="icon-color" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 4.97 5 9 7 13 2-4 7-8.03 7-13a7 7 0 0 0-7-7z"/></symbol>
+  <symbol id="icon-seats" viewBox="0 0 24 24"><path fill="currentColor" d="M7 7h10v5H7zM5 12v6h14v-6H5z"/></symbol>
+  <symbol id="icon-mile" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.85.63 3.55 1.69 4.9L12 20z"/></symbol>
+  <symbol id="icon-close" viewBox="0 0 24 24"><path fill="currentColor" d="M18 6L6 18M6 6l12 12"/></symbol>
+</svg>
+
+<div id="carModalOverlay" class="car-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="carModalTitle">
+  <div class="car-modal" role="document">
+    <div class="gallery" aria-hidden="false">
+      <img id="carModalMainImg" class="main-image" src="" alt="car image" loading="lazy">
+      <div class="thumbs" id="carModalThumbs" role="list"></div>
+    </div>
+
+    <div class="details" aria-live="polite">
+      <div class="top">
+        <div id="carModalBadge" class="badge"></div>
+        <div style="flex:1">
+          <h2 id="carModalTitle" class="title"></h2>
+          <div id="carModalSubtitle" class="subtitle"></div>
+        </div>
+      </div>
+
+      <div id="carModalSpecs" class="spec-list" role="list"></div>
+
+      <div>
+        <div class="meta-row kicker">Деталі та стан авто — орієнтовні. Для точної інформації зверніться до менеджера.</div>
+        <div class="price" id="carModalPrice"></div>
+        <div class="actions" style="margin-top:8px">
+          <button class="buy" id="carModalBuy"> Купити</button>
+            <span class="visually-hidden"></span>
+          </button>          
+          <button class="close" id="carModalClose" aria-label="Закрити" type="button" title="Закрити">
+            <i class="bi bi-x-lg icon-svg" aria-hidden="true"></i>
+          </button>        
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Enhanced modal behavior with icons mapping & keyboard thumbnails
+document.addEventListener('DOMContentLoaded', () => {
+  const modalOverlay = document.getElementById('carModalOverlay');
+  const modalMainImg = document.getElementById('carModalMainImg');
+  const modalThumbs = document.getElementById('carModalThumbs');
+  const modalTitle = document.getElementById('carModalTitle');
+  const modalSpecs = document.getElementById('carModalSpecs');
+  const modalPrice = document.getElementById('carModalPrice');
+  const modalBadge = document.getElementById('carModalBadge');
+  const modalSubtitle = document.getElementById('carModalSubtitle');
+  const btnClose = document.getElementById('carModalClose');
+  const btnBuy = document.getElementById('carModalBuy');
+  const btnWishlist = document.getElementById('carModalWishlist');
+
+  const specIconMap = {
+    'Рік випуску': 'calendar',
+    'Двигун': 'gear',
+    'Тип пального': 'fuel-pump',
+    'Пробіг': 'speedometer2',
+    'Привід': 'gear',
+    'Коробка передач': 'gear',
+    'Колір': 'palette',
+    'Кількість місць': 'people-fill'
+  };
+
+
+
+
+
+function makeSpecItem(label, value){
+    const div = document.createElement('div');
+    div.className = 'spec-item';
+    const iconId = specIconMap[label] || 'speedometer2';
+    const biClass = iconId.startsWith('bi') ? iconId : 'bi bi-' + iconId;
+    div.innerHTML = `
+      <div class="icon" aria-hidden="true"><i class="${biClass} icon-svg" aria-hidden="true"></i></div>
+      <div style="flex:1">
+        <span class="label">${label}</span>
+        <span class="value">${value}</span>
+      </div>
+    `;
+    return div;
+  }
+
+  // Функція для витягування тексту з spec-item
+  function extractSpecText(el) {
+    // Якщо є svg, пропускаємо його і береємо тільки текст
+    const clone = el.cloneNode(true);
+    const svg = clone.querySelector('svg');
+    if (svg) svg.remove();
+    const icon = clone.querySelector('.icon');
+    if (icon) icon.remove();
+    return clone.textContent.trim();
+  }
+
+  // Мапінг іконок до лейблів на основі тексту
+  const labelIconMap = {
+    '2021': 'Рік випуску',
+    '2022': 'Рік випуску',
+    '2023': 'Рік випуску',
+    '2020': 'Рік випуску',
+    '2019': 'Рік випуску',
+    '2018': 'Рік випуску',
+    '2017': 'Рік випуску',
+    '2015': 'Рік випуску',
+    'Бензин': 'Тип палива',
+    'Бензин-гібрид': 'Тип палива',
+    'Гібрид-бензин': 'Тип палива',
+    'Електро': 'Тип палива',
+    'Передній': 'Привід',
+    'Повний': 'Привід',
+    'Задній': 'Привід'
+  };
+
+  function smartParseSpec(text) {
+    // Спроба визначити що це за поле
+    if (/^\d{4}$/.test(text)) return { label: 'Рік випуску', value: text };
+    if (/^\d+\.\d+$/.test(text)) return { label: 'Двигун', value: text + ' L' };
+    if (/^\d+\s*kWh?$/.test(text)) return { label: 'Батарея', value: text };
+    if (/(mi|км|km)$/i.test(text)) return { label: 'Пробіг', value: text };
+    if (labelIconMap[text]) return { label: labelIconMap[text], value: text };
+    // Якщо не вдалось визначити, повертаємо як є
+    return { label: 'Деталь', value: text };
+  }
+
+
+
+  let lastFocused = null;
+
+  document.querySelectorAll('.car-button').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      lastFocused = document.activeElement;
+      const card = btn.closest('.car-card') || btn.closest('article') || btn.closest('.catalog-item');
+      if (!card) return;
+
+      const dataImgs = card.dataset.images ? card.dataset.images.split(',').map(s => s.trim()) : [];
+      const mainImgEl = card.querySelector('img') || card.querySelector('.car-image img');
+      const mainSrc = mainImgEl ? mainImgEl.getAttribute('src') : '';
+      const images = dataImgs.length ? dataImgs : (mainSrc ? [mainSrc] : []);
+
+      const title = (card.querySelector('.car-info h3') || card.querySelector('h3'))?.textContent.trim() || '';
+      const badge = card.querySelector('.car-image .car-badge')?.textContent.trim() || (card.querySelector('.badge')?.textContent.trim() || '');
+      const price = (card.querySelector('.price')?.textContent.trim()) || (card.dataset.price || '');
+      const subtitle = card.querySelector('.car-subtitle')?.textContent.trim() || '';
+
+      let specItems = [];
+      if (card.querySelectorAll('.spec-item').length){
+        specItems = Array.from(card.querySelectorAll('.spec-item')).map(s => s.textContent.trim()).filter(Boolean);
+      } else if (card.dataset.specs){
+        try {
+          const obj = JSON.parse(card.dataset.specs);
+          specItems = Object.entries(obj).map(([k,v]) => `${k}: ${v}`);
+        } catch (err){
+        }
+      } else {
+        const fields = [
+          {label: 'Рік випуску', sel: '.year'},
+          {label: 'Двигун', sel: '.engine'},
+          {label: 'Тип пального', sel: '.fuel'},
+          {label: 'Пробіг', sel: '.mileage'},
+          {label: 'Привід', sel: '.drive'},
+          {label: 'Коробка передач', sel: '.transmission'},
+          {label: 'Колір', sel: '.color'},
+          {label: 'Кількість місць', sel: '.seats'}
+        ];
+        fields.forEach(f => {
+          const el = card.querySelector(f.sel);
+          if (el && el.textContent.trim()) specItems.push(`${f.label}: ${el.textContent.trim()}`);
+        });
+      }
+
+      modalBadge.textContent = badge;
+      modalTitle.textContent = title;
+      modalPrice.textContent = price;
+      modalSubtitle.textContent = subtitle;
+
+      modalSpecs.innerHTML = '';
+      specItems.forEach(itemText => {
+        const parts = itemText.split(':');
+        const label = parts.length > 1 ? parts.shift().trim() : 'Деталь';
+        const value = parts.join(':').trim();
+        modalSpecs.appendChild(makeSpecItem(label, value));
+      });
+
+      modalThumbs.innerHTML = '';
+      images.forEach((src, i) => {
+        const t = document.createElement('img');
+        t.src = src;
+        t.loading = 'lazy';
+        t.alt = title + ' ' + (i+1);
+        t.tabIndex = 0;
+        if (i === 0) t.classList.add('active');
+        t.addEventListener('click', () => {
+          modalMainImg.src = src;
+          modalThumbs.querySelectorAll('img').forEach(x => x.classList.remove('active'));
+          t.classList.add('active');
+          t.focus();
+        });
+        t.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Enter' || ev.key === ' ') t.click();
+          if (ev.key === 'ArrowLeft') {
+            if (t.previousElementSibling) t.previousElementSibling.focus();
+          }
+          if (ev.key === 'ArrowRight') {
+            if (t.nextElementSibling) t.nextElementSibling.focus();
+          }
+        });
+        modalThumbs.appendChild(t);
+      });
+
+      modalMainImg.src = images[0] || '';
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      btnClose.focus();
+    });
+  });
+
+  function closeModal(){
+    modalOverlay.classList.remove('open');
+    modalOverlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  btnClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  btnBuy.addEventListener('click', () => {
+    closeModal();
+    const contact = document.querySelector('#contact') || document.querySelector('form');
+    if (contact) contact.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  btnWishlist.addEventListener('click', () => {
+    btnWishlist.classList.toggle('active');
+    btnWishlist.style.boxShadow = btnWishlist.classList.contains('active') ? '0 8px 30px rgba(139,59,255,0.16)' : '';
+  });
+});
+</script>
+
+
+<!-- Розміщуємо overlay один раз для всіх переходів -->
+<div id="sectionTransition" class="section-transition-overlay" aria-hidden="true">
+  <div class="overlay-pulse" aria-hidden="true"></div>
+</div>
+
+<!-- SVG ICONS DEFINITIONS -->
+<svg width="0" height="0" style="position:absolute;">
+	<symbol id="icon-calendar" viewBox="0 0 24 24">
+	  <path fill="currentColor" d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7Zm12 6H5v12h14V8Z"/>
+	</symbol>
+	<symbol id="icon-engine" viewBox="0 0 24 24">
+	  <path fill="currentColor" d="M3 10v6h3l2 2h10v-2h2v-4h-2V9h-8l-2-2H5a2 2 0 0 0-2 2Zm14-4v2h4V6h-4Z"/>
+	</symbol>
+  <symbol id="icon-fuel" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M6 2a2 2 0 0 0-2 2v16h10V4a2 2 0 0 0-2-2H6Zm2 4h2v2H8V6Zm11.5 2.5-1.3 1.3A2 2 0 0 0 18 11v7a2 2 0 1 0 2 2V12l1-1V7h-1.5Z"/>
+  </symbol>
+	<symbol id="icon-road" viewBox="0 0 24 24">
+	  <path fill="currentColor" d="M12 2a9 9 0 1 0 9 9h-2A7 7 0 1 1 12 4V2Zm1 9V5h-2v6h2Z"/>
+	</symbol>
+  <symbol id="icon-battery" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M2 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2h2v-4h-2V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>
+  </symbol>
+  <symbol id="icon-electric" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M13 2 6 14h5v8l7-12h-5z"/>
+  </symbol>
+</svg>
+
+    <header>
+        <nav>
+            <div class="logo">TRIUMPH AUTO</div>
+            <ul class="nav-links">
+                <li><a href="#home">Головна</a></li>
+                <li><a href="#advantages">Переваги</a></li>
+                <li><a href="#process">Як працюємо</a></li>
+                <li><a href="#catalog">Каталог</a></li>
+                <li><a href="#contact">Контакти</a></li>
+            </ul>
+            <div class="contact-header">
+                <svg viewBox="0 0 24 24">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                +38 097 122 22 40
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Веземо автомобілі з США,Канади</div>
+            <h1>Авто зі США <span>під ключ</span></h1>
+            <p>Професійний підбір та доставка автомобілів з аукціонів Copart та IAAI. Повний супровід від вибору до українських номерів.</p>
+            <div class="cta-buttons">
+                <a href="#catalog" class="cta-button">Переглянути авто</a>
+                <a href="#contact" class="cta-button secondary">Безкоштовна консультація</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="advantages">
+        <h2 class="section-title">Чому <span>обирають нас</span></h2>
+        <p class="section-subtitle">Ваша надійність на шляху до мрії про американський автомобіль</p>
+        <div class="advantages">
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <h3>Перевірена якість</h3>
+                <p>Детальна перевірка технічного стану, повний VIN-звіт та фото авто до покупки</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <h3>Прозора ціна</h3>
+                <p>Чітке ціноутворення без прихованих комісій. Ви знаєте вартість до останнього центу</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                </div>
+                <h3>Швидка доставка</h3>
+                <p>Організуємо логістику океаном та суходолом. Термін доставки 45-60 днів</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>Повний супровід</h3>
+                <p>Ведемо вас на всіх етапах: від підбору до отримання українських номерів</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <h3>Легальність 100%</h3>
+                <p>Повне юридичне оформлення, митне розмитнення та сертифікація</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3>24/7 підтримка</h3>
+                <p>Консультуємо цілодобово. Допоможемо підібрати авто під ваш бюджет</p>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="process-section" id="process">
+        <div class="section">
+            <h2 class="section-title">Як ми <span>працюємо</span></h2>
+            <p class="section-subtitle">Простий та прозорий процес від вибору до отримання авто</p>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3>Підбір і викуп</h3>
+                    <p>Автомобіль підбирається на одному з американських аукціонів (Copart, IAAI). Перевіряється за допомогою платних перевірок та наших представників на аукціонах</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3>Доставка до порту</h3>
+                    <p>Після викупу авто з аукціону, воно доставляється до точки відбуття (порт), де завдяки прорахованій логістиці автомобілі відразу завантажуються на судно</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3>Океанська доставка</h3>
+                    <p>Після того як логістична компанія розподілила автомобілі по контейнерах, судно відправляється з США в порт Клайпеда (Литва), що займає 15-20 днів</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3>Доставка в Україну</h3>
+                    <p>Доставляємо авто з порту Клайпеда в Україну власними автовозами, розмитнюємо та доставляємо на майданчик. Далі — видача власнику або адресна доставка</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<section class="section" id="catalog">
+  <h2 class="section-title">Актуальні <span>пропозиції</span></h2>
+  <p class="section-subtitle">Авто в наявності та під замовлення з аукціонів США</p>
+
+  <div class="cars-grid">
+
+
+    <!-- Toyota RAV4 SE 2022 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/rav4.jpg" alt="Toyota RAV4 SE 2022" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>TOYOTA RAV4 SE</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2022</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.5</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин-гібрид</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>45,573 mi</div>
+        </div>
+        <p class="price">11.300$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Audi Q7 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/q7.jpg" alt="Audi Q7 Premium Plus 2019" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>AUDI Q7 PREMIUM PLUS</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2019</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>68,517 mi</div>
+        </div>
+        <p class="price">27.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- RAV4 XLE 2023 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/rav4-xle.jpg" alt="Toyota RAV4 XLE 2023" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>TOYOTA RAV4 XLE</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2023</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.5</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Гібрид-бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>27,583 km</div>
+        </div>
+        <p class="price">441.300$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- KIA EV6 GT -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/kia-ev6.jpg" alt="KIA EV6 GT 2023" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>KIA EV6 GT</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2023</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-battery" /></svg>77 kWh</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-electric" /></svg>Електро</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>28,290 km</div>
+        </div>
+        <p class="price">14.300$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Ford Fusion -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/VOLVO XC90 T6 INSCRIPTION.png" alt="VOLVO XC90 T6 INSCRIPTION" loading="lazy">
+        <div class="car-badge">Вигідна пропозиція!</div>
+      </div>
+      <div class="car-info">
+        <h3>VOLVO XC90 T6 INSCRIPTION</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2018</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>58,132 mi</div>
+        </div>
+        <p class="price">25.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Mazda CX-5 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/mazda-cx5.jpg" alt="Mazda CX-5 Preferred 2023" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>MAZDA CX-5 PREFERRED</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2023</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.5</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>22,248 mi</div>
+        </div>
+        <p class="price">31.300$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+    <!-- Volkswagen Passat -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/passat-se-rline.png" alt="Volkswagen Passat SE R-Line 2018" loading="lazy">
+        <div class="car-badge">Вигідна пропозиція!</div>
+      </div>
+      <div class="car-info">
+        <h3>VOLKSWAGEN PASSAT SE R-LINE</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2018</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>90,000 mi</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-drive" /></svg>Передній</div>
+        </div>
+        <p class="price">11.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Volvo XC60 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/xc60.png" alt="Volvo XC60 T6 2015" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>VOLVO XC60 T6</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2015</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>95,000 mi</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-drive" /></svg>Передній</div>
+        </div>
+        <p class="price">12.500$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Audi Q7 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/q7.jpg" alt="Audi Q7 Premium Plus 2019" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>AUDI Q7 PREMIUM PLUS</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2019</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>3.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>60,948 mi</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-drive" /></svg>Повний</div>
+        </div>
+        <p class="price">27.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Nissan Rogue -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/rogue-sv.png" alt="Nissan Rogue SV 2020" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>NISSAN ROGUE SV</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2020</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.5</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>52,857 mi</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-drive" /></svg>Передній</div>
+        </div>
+        <p class="price">18.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+    <!-- Audi Q5 -->
+    <article class="car-card">
+      <div class="car-image">
+        <img src="images/cars/q5-premium.png" alt="Audi Q5 Premium 45 2021" loading="lazy">
+        <div class="car-badge">Виграли на аукціоні</div>
+      </div>
+      <div class="car-info">
+        <h3>AUDI Q5 PREMIUM 45</h3>
+        <div class="car-specs">
+          <div class="spec-item"><svg class="icon"><use href="#icon-calendar" /></svg>2021</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-engine" /></svg>2.0</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-fuel" /></svg>Бензин</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-road" /></svg>28,926 mi</div>
+          <div class="spec-item"><svg class="icon"><use href="#icon-drive" /></svg>Повний</div>
+        </div>
+        <p class="price">28.000$</p>
+        <a href="#" class="car-button">Детальніше</a>
+      </div>
+    </article>
+
+
+  </div>
+</section>
+
+
+
+
+    <section class="contact-section section-fade-top" data-transition="true" id="contact">
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Готові придбати<br><span>авто своєї мрії?</span></h3>
+                <p>Зв'яжіться з нами зараз і отримайте безкоштовну консультацію від наших експертів. Ми допоможемо підібрати ідеальний автомобіль під ваш бюджет та потреби.</p>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <h4>Телефон</h4>
+                        <p>+38 097 122 22 40</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="contact-item-content">
+                        <h4>Email</h4>
+                        <p>triumphauto@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="contat-item-content">
+                        <h4>Зацікавилися?</h4>
+                        <p> Не зволікайте,напишіть нам щоб отримати безкоштовну консультацію.</p>
+                    </div>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.instagram.com/triumph_auto_import/" class="social-link">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                <a href="https://www.tiktok.com/@triumph_auto_import" class="social-link">
+                  <svg viewBox="0 0 25 24" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                    <g transform="translate(4,3)">
+                      <path d="M11.5 1c.2 2 1.7 3.6 3.7 3.7v2.4a6.1 6.1 0 0 1-3.7-1.2v6.4a5.4 5.4 0 1 1-5.4-5.4c.4 0 .7 0 1 .1v2.5a2.8 2.8 0 1 0 1.9 2.6V1h2.5z"/>
+                    </g>
+                  </svg>
+                </a>
+
+
+                    <a href="https://t.me/triumph_auto_import" class="social-link">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9.417 15.181l-.397 5.584c.568 0 .814-.244 1.109-.537l2.663-2.545 5.518 4.041c1.012.564 1.725.267 1.998-.931l3.622-16.972.001-.001c.321-1.496-.541-2.081-1.527-1.714l-21.29 8.151c-1.453.564-1.431 1.374-.247 1.741l5.443 1.693L18.953 5.78c.595-.394 1.136-.176.691.218z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <form class="contact-form" onsubmit="return handleSubmit(event)">
+                <div class="form-group">
+                    <label>Ваше ім'я</label>
+                    <input type="text" placeholder="Введіть ім'я" required>
+                </div>
+                <div class="form-group">
+                    <label>Номер телефону</label>
+                    <input type="tel" placeholder="+380 (__)___-__-__" required>
+                </div>
+                <div class="form-group">
+                    <label>Повідомлення</label>
+                    <textarea placeholder="Розкажіть про ваші побажання..." required></textarea>
+                </div>
+                <button type="submit" class="submit-button">Відправити заявку</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">TRIUMPH AUTO</div>
+                <p>Професійний імпорт преміальних автомобілів зі США. Працюємо напряму з найбільшими американськими аукціонами Copart та IAAI.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Компанія</h4>
+                <a href="#about">Про нас</a>
+                <a href="#advantages">Переваги</a>
+                <a href="#process">Як працюємо</a>
+                <a href="#contact">Контакти</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Послуги</h4>
+                <a href="#">Підбір авто</a>
+                <a href="#">Доставка</a>
+                <a href="#">Розмитнення</a>
+                <a href="#">Сертифікація</a>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Контакти</h4>
+                <p>+38 097 122 22 40</p>
+                <p>triumph.auto.import@gmail.com</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 TRIUMPH AUTO IMPORT. Всі права захищені.</p>
+        </div>
+    </footer>
+
+<script>
+async function handleSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    name: form.querySelector('input[type="text"]').value.trim(),
+    phone: form.querySelector('input[type="tel"]').value.trim(),
+    email: form.querySelector('input[type="email"]').value.trim(),
+    category: form.querySelector('select').value,
+    message: form.querySelector('textarea').value.trim()
+  };
+
+  if (!data.name || !data.phone) {
+    alert("Вкажіть ім'я та телефон");
+    return false;
+  }
+
+  // Якщо ви відкрили сторінку через file:// – підказка
+  if (window.location.protocol === 'file:') {
+    alert('Сторінка відкрита локально через file:// — запустіть сервер (node server.js) і відкрийте http://localhost:3000');
+    return false;
+  }
+
+  const url = '/api/submit'; // працюватиме коли фронт і бек на одному origin (http://localhost:3000)
+  try {
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+
+    const text = await resp.text();
+    console.log('Submit HTTP status:', resp.status, 'body:', text);
+
+    let json;
+    try { json = JSON.parse(text); } catch(e) { json = null; }
+
+    if (!resp.ok) {
+      alert('Сервер повернув помилку. Дивіться консоль для деталей.');
+      return false;
+    }
+
+    if (json && json.ok) {
+      alert('Дякуємо! Заявку надіслано.');
+      form.reset();
+    } else {
+      alert('Отримано відповідь від сервера. Перевірте консоль.');
+    }
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Помилка з\'єднання. Перевірте консоль (F12).');
+  }
+  return false;
+}
+
+(() => {
+  // Налаштування: ідентифікатори секцій
+  const FIRST_ID = 'hero'; // змінити на id секції "Авто зі США під ключ"
+  const SECOND_ID = 'why'; // змінити на id секції "Чому обирають нас"
+  const TRANSITION_TIME = 540; // ms (тривалість показу overlay)
+
+  const overlay = document.getElementById('sectionTransition');
+  if (!overlay) return;
+
+  // Функція, яка запускає transition (повертає Promise)
+  function playTransition(ms = TRANSITION_TIME) {
+    return new Promise(resolve => {
+      overlay.classList.add('active');
+      // очистка через timeout
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        // невеликий відстрочений resolve, щоб встигло згаснути
+        setTimeout(resolve, 80);
+      }, ms);
+    });
+  }
+
+  // IntersectionObserver для виявлення входу/виходу секцій
+  let firstVisible = true;
+  const obsOptions = { root: null, threshold: [0, 0.15, 0.5, 0.9] };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const ratio = entry.intersectionRatio;
+      // оновлюємо стан видимості першої/другої
+      if (id === FIRST_ID) firstVisible = ratio > 0.15;
+      // якщо перший став невидимим і другий досить видимий — запускаємо transition
+      if (id === SECOND_ID && ratio > 0.25 && !firstVisible) {
+        // запускаємо, але уникаємо дублюючих викликів
+        if (!overlay._running) {
+          overlay._running = true;
+          playTransition().finally(() => {
+            overlay._running = false;
+          });
+        }
+      }
+    });
+  }, obsOptions);
+
+  const firstEl = document.getElementById(FIRST_ID);
+  const secondEl = document.getElementById(SECOND_ID);
+  if (firstEl) observer.observe(firstEl);
+  if (secondEl) observer.observe(secondEl);
+
+  // Додатково: якщо у вас навігація кнопками/стрілками, можна викликати playTransition() вручну перед скролом.
+  // Наприклад:
+  // document.querySelector('.nav-next').addEventListener('click', async (e) => {
+  //   e.preventDefault();
+  //   await playTransition();
+  //   document.getElementById(SECOND_ID).scrollIntoView({behavior:'smooth'});
+  // });
+
+})();
+(function(){
+  const overlay = document.getElementById('sectionTransition');
+  if(!overlay) return;
+
+  const TRANSITION_MS = 520; // duration of active overlay
+  overlay._running = false;
+
+  // Play transition; returns a promise when finished
+  function playTransition(ms = TRANSITION_MS) {
+    if (overlay._running) return Promise.resolve(); // already running
+    overlay._running = true;
+    overlay.classList.add('active');
+    // keep overlay active for ms, then remove
+    return new Promise(resolve => {
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        // small extra wait to allow CSS to finish
+        setTimeout(() => {
+          overlay._running = false;
+          resolve();
+        }, 80);
+      }, ms);
+    });
+  }
+
+  // IntersectionObserver: when a target with data-transition enters view -> if the previous section is not visible, show overlay
+  // We'll observe all elements with data-transition="true"
+  const targets = Array.from(document.querySelectorAll('[data-transition="true"]'));
+  if (targets.length === 0) return;
+
+  // track visibility by id
+  const visibleMap = new Map();
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const el = entry.target;
+      const id = el.id || el.dataset.tid || Math.random().toString(36).slice(2,7);
+      const ratio = entry.intersectionRatio;
+      const prevVisible = visibleMap.get(id) || false;
+      const nowVisible = ratio > 0.25;
+
+      visibleMap.set(id, nowVisible);
+
+      // If element just became visible and some other previously-observed section was visible but is now not,
+      // we can consider this a transition and play overlay.
+      if (nowVisible && !prevVisible) {
+        // find if any other observed target had been visible recently
+        let anyOtherVisible = false;
+        for (const [k,v] of visibleMap.entries()) {
+          if (k !== id && v) { anyOtherVisible = true; break; }
+        }
+        // If we are entering and some other was visible before -> play
+        if (anyOtherVisible) {
+          // Slight debounce: if overlay already running, skip
+          if (!overlay._running) {
+            playTransition();
+          }
+        }
+      }
+    });
+  }, { threshold: [0, 0.15, 0.25, 0.5], rootMargin: "0px 0px -10% 0px" });
+
+  targets.forEach(t => obs.observe(t));
+
+  // Optional helper: play transition programmatically
+  window.playSectionTransition = playTransition;
+
+})();
+
+
+/* Mobile-friendly modal controls */
+(function () {
+  const overlay = document.getElementById('carModalOverlay');
+  const closeBtn = document.getElementById('carModalClose');
+  const thumbs = document.getElementById('carModalThumbs');
+  const modal = overlay ? overlay.querySelector('.car-modal') : null;
+  let touchStartY = 0;
+  let lastTranslate = 0;
+  let touching = false;
+  let touchStartTime = 0;
+
+  if (!overlay || !modal) return;
+
+  function openModal() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    // reset transforms
+    modal.style.transform = '';
+    modal.style.transition = '';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    // clear any held transforms
+    modal.style.transform = '';
+    modal.classList.remove('dragging');
+  }
+
+  // overlay click closes when clicking backdrop (not when clicking modal content)
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // close button
+  closeBtn.addEventListener('click', closeModal);
+
+  // Esc key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  // Touch handling for swipe-down to close (mobile)
+  function onTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    touching = true;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+    lastTranslate = 0;
+    modal.classList.remove('notransition');
+  }
+  function onTouchMove(e) {
+    if (!touching) return;
+    const curY = e.touches[0].clientY;
+    const dy = Math.max(0, curY - touchStartY); // only downward
+    // if the details column is scrollable and user scrolled inside details, don't hijack
+    const activeScroll = modal.querySelector('.details');
+    if (activeScroll) {
+      // if details still has scrollTop > 0, do not move modal
+      if (activeScroll.scrollTop > 6) return;
+    }
+    lastTranslate = dy;
+    modal.style.transform = `translateY(${dy}px)`;
+    modal.classList.add('dragging');
+  }
+  function onTouchEnd(e) {
+    if (!touching) return;
+    touching = false;
+    const dt = Date.now() - touchStartTime;
+    const velocity = lastTranslate / Math.max(1, dt); // px/ms
+    const shouldClose = lastTranslate > 120 || velocity > 0.5;
+    if (shouldClose) {
+      // animate out and then close
+      modal.style.transition = 'transform 160ms ease-out, opacity 160ms ease-out';
+      modal.style.transform = `translateY(100vh)`;
+      setTimeout(() => closeModal(), 160);
+    } else {
+      // snap back
+      modal.style.transition = 'transform 180ms cubic-bezier(.2,.9,.2,1)';
+      modal.style.transform = '';
+      setTimeout(() => modal.classList.remove('dragging'), 200);
+    }
+  }
+
+  // attach only on touch devices for performance
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
+  window.addEventListener('touchend', onTouchEnd);
+
+  /* Utility: open modal buttons (if you have several open triggers) */
+  document.querySelectorAll('[data-open-car-modal]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // optionally populate modal content here (image src, thumbs, title...)
+      openModal();
+    });
+  });
+
+  /* Make thumbs touch-scroll nicer (prevent accidental text-select) */
+  if (thumbs) {
+    let isDown = false, startX, scrollLeft;
+    thumbs.addEventListener('pointerdown', (e) => {
+      isDown = true;
+      thumbs.setPointerCapture(e.pointerId);
+      startX = e.clientX;
+      scrollLeft = thumbs.scrollLeft;
+      thumbs.classList.add('dragging-thumb');
+    });
+    thumbs.addEventListener('pointermove', (e) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      thumbs.scrollLeft = scrollLeft - dx;
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => {
+      thumbs.addEventListener(ev, () => {
+        isDown = false;
+        thumbs.classList.remove('dragging-thumb');
+      });
+    });
+  }
+
+  // Expose open/close to window if needed
+  window.carModalOpen = openModal;
+  window.carModalClose = closeModal;
+
+})();
+
+</script>
+</body>
+</html>
