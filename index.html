@@ -131,13 +131,12 @@
         <div class="meta-row kicker">Деталі та стан авто — орієнтовні. Для точної інформації зверніться до менеджера.</div>
         <div class="price" id="carModalPrice"></div>
         <div class="actions" style="margin-top:8px">
-          <button class="buy" id="carModalBuy"> Купити</button>
-            <span class="visually-hidden"></span>
-          </button>          
+          <button class="buy" id="carModalBuy">Купити</button>
+          <span class="visually-hidden"></span>
           <button class="close" id="carModalClose" aria-label="Закрити" type="button" title="Закрити">
             <i class="bi bi-x-lg icon-svg" aria-hidden="true"></i>
-          </button>        
-          </div>
+          </button>
+        </div>  
       </div>
     </div>
   </div>
@@ -146,7 +145,6 @@
 <script>
 // Enhanced modal behavior with icons mapping & keyboard thumbnails
 document.addEventListener('DOMContentLoaded', () => {
-  const modalOverlay = document.getElementById('carModalOverlay');
   const modalMainImg = document.getElementById('carModalMainImg');
   const modalThumbs = document.getElementById('carModalThumbs');
   const modalTitle = document.getElementById('carModalTitle');
@@ -318,7 +316,8 @@ function makeSpecItem(label, value){
       modalMainImg.src = images[0] || '';
       modalOverlay.classList.add('open');
       modalOverlay.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
       btnClose.focus();
     });
   });
@@ -326,7 +325,8 @@ function makeSpecItem(label, value){
   function closeModal(){
     modalOverlay.classList.remove('open');
     modalOverlay.setAttribute('aria-hidden','true');
-    document.body.style.overflow = '';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 
