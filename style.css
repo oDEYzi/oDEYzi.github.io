@@ -1674,5 +1674,395 @@ header {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
+/* ===== Responsive header + mobile menu ===== */
+.mobile-nav-toggle{
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 8px;
+  border-radius: 10px;
+  color: #FFD700;
+  font-size: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 968px){
+  .nav-links { display: none; }
+  .mobile-nav-toggle { display: inline-flex; }
+  nav { padding: 12px 16px; gap: 12px; }
+  .logo { font-size: 18px; }
+  .contact-header { font-size: 13px; display: none; } /* сховати, щоб хедер не зміщувався */
+}
 
+/* mobile expanded menu */
+#mainNav.mobile-open {
+  position: fixed;
+  top: 64px;
+  left: 8px;
+  right: 8px;
+  background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(8,8,8,0.98));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1500;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+#mainNav.mobile-open a { padding: 10px 12px; border-radius: 8px; }
+
+/* Ensure header doesn't hide content on small screens */
+.hero { margin-top: 72px; }
+@media (max-width:420px){ .hero { margin-top:68px; } }
+
+/* ===== Modal: modern, accessible, responsive ===== */
+.car-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px) saturate(1.05);
+  display: grid;
+  place-items: center;
+  z-index: 2200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+.car-modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* container */
+.car-modal {
+  width: min(1100px, 96vw);
+  background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(8,8,8,0.95));
+  border-radius: 14px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.75);
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 18px;
+  overflow: hidden;
+  max-height: 90vh;
+}
+
+/* Left: big image + thumbs */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+}
+.main-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform .45s ease, filter .3s ease;
+  -webkit-user-drag: none;
+}
+.main-image.dragging { transition: none; }
+
+.img-nav {
+  position: absolute;
+  inset: auto 8px 8px auto;
+  display: flex;
+  gap: 8px;
+  z-index: 6;
+}
+.img-nav button {
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+/* Thumbs */
+.thumbs {
+  display: flex;
+  gap: 10px;
+  padding: 6px 6px 12px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+.thumbs img {
+  width: 80px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  border: 2px solid transparent;
+  scroll-snap-align: start;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.thumbs img:focus { outline: none; box-shadow: 0 4px 14px rgba(0,0,0,0.6); }
+.thumbs img.active { transform: scale(1.03); border-color: #FFD700; }
+
+/* Right: details */
+.details {
+  padding: 18px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.car-modal .title { font-size: 20px; font-weight: 800; line-height: 1.1; margin-bottom: 4px; color: #fff; }
+.car-modal .subtitle { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 6px; }
+.car-modal .badge { font-weight: 700; color: #0a0a0a; background: linear-gradient(135deg,#FFD700,#FFA500); padding: 6px 12px; border-radius: 12px; display:inline-block; }
+.spec-list { display: grid; gap: 8px; margin-top:6px; }
+.spec-item { display:flex; gap:10px; align-items:center; background: rgba(255,255,255,0.02); padding:10px; border-radius:10px; }
+.spec-item .label { font-size:12px; color: #f4e7b0; font-weight:700; }
+.spec-item .value { font-size:14px; color: #fff; }
+
+/* Actions (Buy/Close) */
+.actions { margin-top:auto; display:flex; gap:10px; align-items:center; }
+.actions .buy {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#FFD700,#FFA500);
+  border: none;
+  font-weight: 800;
+  cursor: pointer;
+}
+.actions .close {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* small screens: stack */
+@media (max-width: 920px) {
+  .car-modal { grid-template-columns: 1fr; width: min(920px, 96vw); max-height: 95vh; }
+  .gallery { padding: 12px; }
+  .details { padding: 12px; max-height: 46vh; overflow: auto; }
+  .thumbs img { width: 72px; height: 52px; }
+}
+
+/* tiny screens */
+@media (max-width: 480px) {
+  #mainNav.mobile-open { top: 58px; left: 6px; right: 6px; }
+  .main-image-wrap { aspect-ratio: 4/3; }
+  .thumbs img { width: 64px; height: 46px; }
+}
+
+}
+/* Додайте ці стилі в кінець вашого style.css */
+
+/* ===== MOBILE MODAL IMPROVEMENTS ===== */
+@media (max-width: 980px) {
+  .car-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+  
+  .car-modal {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 20px 20px 0 0;
+    max-height: 95vh;
+    height: auto;
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .car-modal .gallery {
+    padding: 0;
+  }
+  
+  .car-modal .main-image-wrap {
+    aspect-ratio: 4/3;
+    max-height: 50vh;
+  }
+  
+  .car-modal .main-image {
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .car-modal .details {
+    height: auto;
+    max-height: 40vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 4px;
+  }
+  
+  .car-modal .title {
+    font-size: 22px;
+  }
+  
+  .car-modal .price {
+    font-size: 32px;
+  }
+  
+  .car-modal .spec-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .car-modal .thumbs {
+    padding: 8px 0;
+    gap: 8px;
+  }
+  
+  .car-modal .thumbs img {
+    width: 70px;
+    height: 50px;
+  }
+  
+  /* Close button positioning for mobile */
+  .car-modal #carModalClose {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Swipe indicator */
+  .car-modal::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    z-index: 1000;
+  }
+}
+
+/* ===== MOBILE HEADER IMPROVEMENTS ===== */
+@media (max-width: 968px) {
+  header {
+    padding: 0;
+  }
+  
+  nav {
+    padding: 12px 20px;
+    gap: 12px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .contact-header {
+    display: none;
+  }
+  
+  /* Mobile nav toggle button */
+  .mobile-nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #FFD700;
+    cursor: pointer;
+  }
+  
+  /* Mobile expanded menu */
+  #mainNav.mobile-open {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.98), rgba(8, 8, 8, 0.98));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 1500;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  }
+  
+  #mainNav.mobile-open .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  #mainNav.mobile-open a {
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  
+  /* Ensure header doesn't hide content */
+  .hero {
+    margin-top: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-modal {
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .car-modal .main-image-wrap {
+    aspect-ratio: 1/1;
+  }
+  
+  .car-modal .title {
+    font-size: 18px;
+  }
+  
+  .car-modal .price {
+    font-size: 28px;
+  }
+  
+  .car-modal .thumbs img {
+    width: 60px;
+    height: 45px;
+  }
+  
+  nav {
+    padding: 10px 16px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
 }
