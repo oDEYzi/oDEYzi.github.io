@@ -2046,34 +2046,3 @@ body.modal-open {
   width: 100%;
 }
 
-/* Consolidated modal overlay — place at the end of your CSS */
-.car-modal-overlay {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* підніми, якщо треба, наприклад 2200 */
-  padding: 20px;
-  background: rgba(0,0,0,0.75) !important;
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  backdrop-filter: blur(6px) saturate(120%);
-  transition: opacity .22s ease, visibility .22s;
-  pointer-events: none;
-}
-.car-modal-overlay.open {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Ensure html/body keep your dark background even when modal open */
-html, body {
-  height: 100%;
-  background-color: #000 !important;
-}
-body.modal-open {
-  overflow: hidden !important;
-  position: fixed;
-  width: 100%;
-}
