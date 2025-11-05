@@ -1,5 +1,3 @@
-/* style.css — extracted from index.html */
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
 
 * {
@@ -9,17 +7,16 @@
         }
 
         
-
 :root{
   --bg-dark-1: #050506;
   --bg-dark-2: #0b0c10;
   --accent-1: #FFD700;
   --accent-2: #FFA500;
   --dot-alpha: 0.045;
-  --bg-speed: 28s;       /* швидкість плавного зсуву фону */
+  --bg-speed: 28s;       
 }
 
-/* --- Body / layered background (чисто й зрозуміло) --- */
+
 body {
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   color: #ffffff;
@@ -30,23 +27,12 @@ body {
   min-height: 100vh;
   margin: 0;
 
-  /* Шари (зверху вниз):
-     1) теплий розмитий спалах ліворуч
-     2) теплий розмитий спалах праворуч
-     3) тонка повторювальна точкова текстура
-     4) діагональний глибокий градієнт → чорний
-     5) легка віньєтка для глибини
-  */
+
   background-image:
     radial-gradient(650px 450px at 12% 18%, rgba(255,215,0,0.12) 0%, transparent 35%),
     radial-gradient(520px 380px at 82% 78%, rgba(255,165,0,0.08) 0%, transparent 38%),
     linear-gradient(135deg, var(--bg-dark-1) 0%, var(--bg-dark-2) 40%, #000000 100%),
     radial-gradient(ellipse at center, rgba(0,0,0,0.18), rgba(0,0,0,0.6));
-
-
-
-/* single, deterministic keyframes (no duplicates) */
-
 
         header {
             position: fixed;
@@ -136,7 +122,7 @@ body {
     text-align: center;
 }
 
-/* blurred background image layer (images/car.jpg) */
+
 .hero::before {
     content: '';
     position: absolute;
@@ -145,13 +131,13 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transform: scale(1.06); /* slight scale to cover blur edges */
+    transform: scale(1.06); 
     filter: blur(8px) saturate(1.05) brightness(0.55);
     z-index: 0;
     transition: transform 8s ease;
 }
 
-/* keep the warm radial glows and texture as overlays above the image */
+
 .hero-overlay {
     position: absolute;
     top: 0;
@@ -163,7 +149,7 @@ body {
     pointer-events: none;
 }
 
-/* ensure content is above the background layers */
+
 .hero-content {
     position: relative;
     z-index: 2;
@@ -172,7 +158,7 @@ body {
     color: #fff;
 }
 
-/* subtle parallax-like movement on hero image */
+
 @media (prefers-reduced-motion: no-preference) {
     .hero::before {
         animation: heroFloat 28s linear infinite;
@@ -612,7 +598,6 @@ body {
             text-transform: uppercase;
         }
 
-    /* Контактна секція з фоном */
         .contact-section {
         position: relative;
         padding: 80px 20px;
@@ -623,7 +608,6 @@ body {
         gap: 30px;
         }
 
-        /* Затемнення поверх картинки */
         .contact-section::before {
         content: "";
         position: absolute;
@@ -633,13 +617,11 @@ body {
         z-index: 1;
         }
 
-        /* зміщуємо форму і текст поверх фону */
         .contact-section > * {
         position: relative;
         z-index: 2;
         }
 
-        /* сама форма */
         .contact-form {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), rgba(255, 165, 0, 0.05));
             padding: 30px;
@@ -839,6 +821,7 @@ body {
         }
 
         .footer-logo {
+            font-family: "Montserrat";
             font-size: 28px;
             font-weight: 900;
             background: linear-gradient(135deg, #FFD700, #FFA500);
@@ -926,12 +909,11 @@ body {
 
 
 
-/* --- Custom scrollbar (dark gray, transparent track) --- */
 .icon {
   width: 18px;
   height: 18px;
   margin-right: 6px;
-  fill: #FFD700; /* золото */
+  fill: #FFD700; 
   display: inline-block;
   vertical-align: middle;
 }
@@ -945,42 +927,39 @@ body {
   height: 18px;
 }
 
-/* WebKit browsers */
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; /* no gray background */
+    background: transparent; 
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #2f2f2f; /* dark gray thumb */
+    background: #2f2f2f; 
     border-radius: 10px;
-    border: 3px solid transparent; /* keep space so thumb doesn't touch edges */
+    border: 3px solid transparent; 
     box-shadow: none;
     transition: background 0.12s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #3b3b3b; /* slightly lighter on hover */
+    background: #3b3b3b; 
 }
 
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: #2f2f2f transparent;
 }
 
 
-/* Make sure focused elements don't show default outline ugly on custom thumb */
 :focus {
     outline-offset: 2px;
 }
 
-/* Slight accessibility: increase contrast for dot texture when prefers-contrast */
+
 @media (prefers-contrast: more) {
     :root { --dot-alpha: 0.08; }
     body { animation-duration: 18s; }
@@ -988,21 +967,19 @@ body {
 
 
 
-/* --- Links: remove default underline on hover, keep accessible focus-visible --- */
 a {
     text-decoration: none;
-    color: inherit; /* keep color from surrounding context */
+    color: inherit; 
     transition: color 0.12s ease, opacity 0.12s ease;
 }
 
 a:hover,
 a:active {
-    text-decoration: none; /* ensure no underline on hover */
+    text-decoration: none; 
     color: inherit;
     opacity: 0.95;
 }
 
-/* Accessibility: keep visible keyboard focus */
 a:focus {
     outline: none;
 }
@@ -1013,34 +990,34 @@ a:focus-visible {
     border-radius: 6px;
 }
 
-/* Specific: ensure nav links keep their ::after underline behavior but no text-decoration */
+
 .nav-links a {
     text-decoration: none;
 }
 
-/* Specific: footer links no underline */
+
 .footer-section a {
     text-decoration: none;
 }
 
 
 
-/* --- Car images: proper stretching / cropping --- */
+
 .car-image {
     position: relative;
     width: 100%;
-    height: 260px; /* desktop default */
+    height: 260px; 
     overflow: hidden;
     border-radius: 12px;
     display: block;
-    background-color: rgba(0,0,0,0.06); /* fallback while image loads */
+    background-color: rgba(0,0,0,0.06); 
 }
 
 .car-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;      /* preserve aspect ratio, cover container */
-    object-position: center;/* center the focal point */
+    object-fit: cover;      
+    object-position: center;
     display: block;
     transform-origin: center;
     transition: transform 0.6s ease, filter 0.45s ease;
@@ -1048,12 +1025,12 @@ a:focus-visible {
     backface-visibility: hidden;
 }
 
-/* Slight zoom on hover for a premium feel */
+
 .car-card:hover .car-image img {
     transform: scale(1.04);
 }
 
-/* Ensure SVG fallback inside .car-image also centered */
+
 .car-image svg {
     width: 100%;
     height: 100%;
@@ -1063,7 +1040,7 @@ a:focus-visible {
     fill: rgba(255,215,0,0.12);
 }
 
-/* Responsive heights */
+
 @media (max-width: 1200px) {
     .car-image { height: 240px; }
 }
@@ -1074,7 +1051,7 @@ a:focus-visible {
     .car-image { height: 160px; }
 }
 
-/* --- Logo near header text --- */
+
 .logo-container {
   display: flex;
   align-items: center;
@@ -1104,7 +1081,7 @@ a:focus-visible {
   text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
 
-/* ===== FINAL: Refined modal styles (replace previous modal styles) ===== */
+
 .car-modal-overlay{
   position: fixed;
   inset: 0;
@@ -1138,7 +1115,7 @@ a:focus-visible {
 }
 @keyframes modalPop { from { transform: translateY(12px) scale(.995); opacity:0 } to { transform:translateY(0) scale(1); opacity:1 } }
 
-/* LEFT: IMAGE + thumbs */
+
 .car-modal .gallery {
   display:flex;
   flex-direction:column;
@@ -1163,7 +1140,6 @@ a:focus-visible {
 }
 .car-modal .main-image:hover { transform: scale(1.02); filter:brightness(1.03); }
 
-/* arrows on image */
 .car-modal .img-nav {
   position:absolute;
   right:14px;
@@ -1187,7 +1163,7 @@ a:focus-visible {
 }
 .car-modal .img-nav button:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(106,44,255,0.08); }
 
-/* thumbs */
+
 .car-modal .thumbs {
   display:flex;
   gap:12px;
@@ -1206,7 +1182,7 @@ a:focus-visible {
 .car-modal .thumbs img:hover { transform: translateY(-4px); opacity:1; }
 .car-modal .thumbs img.active { border-color: rgba(139,59,255,0.95); box-shadow: 0 10px 30px rgba(106,44,255,0.08); opacity:1; }
 
-/* RIGHT: DETAILS */
+
 .car-modal .details { display:flex; flex-direction:column; justify-content:space-between; padding:6px 2px; }
 
 .car-modal .top-row {
@@ -1235,7 +1211,7 @@ a:focus-visible {
   font-weight:900;
   margin: 4px 0px 12px;
   color: #fff;
-  letter-spacing: -0.1px;
+  letter-spacing: 0.2px;
 }
 
 .car-modal .subtitle {
@@ -1244,7 +1220,7 @@ a:focus-visible {
   margin-bottom:10px;
 }
 
-/* spec cards */
+
 .car-modal .spec-list {
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -1280,17 +1256,19 @@ a:focus-visible {
 }
 .car-modal .spec-item .value {
   display:block;
-  color: #fff;
+  color: #fdb44e;
   font-weight:800;
+  font-family: "Montserrat";
   margin-top:4px;
   letter-spacing:0.2px;
 }
 
-/* price & actions row */
-.car-modal .meta-row { color: rgba(253, 220, 220, 0.8); font-size:15px; margin-bottom:8px; }
+
+.car-modal .meta-row { font-family: 'Montserrat' ;color: rgba(253, 220, 220, 0.8); font-size:14px; margin-bottom:8px; }
 .car-modal .price {
   font-size:40px;
   font-weight:900;
+  font-family: "Montserrat";
   color: #fff;
   margin:8px 0 16px;
   text-shadow: 0 6px 24px linear-gradient(135deg,#ffc43b,#f66a19);
@@ -1298,21 +1276,51 @@ a:focus-visible {
 .car-modal .actions { display:flex; gap:12px; align-items:center; }
 
 .car-modal .actions .buy {
-  background: linear-gradient(135deg,#ffc43b,#f66a19);
-  color: #fff;
-  padding:14px 26px;
-  border-radius:14px;
-  font-weight:900;
-  border:none;
-  cursor:pointer;
-  box-shadow: 0 14px 40px rgba(255, 143, 44, 0.16);
-  display:inline-flex;
-  gap:10px;
-  align-items:center;
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-
+  background: linear-gradient(135deg,#FFD700,#FFA500);
+  color: #0a0a0a;
+  padding: 14px 26px;
+  border-radius: 14px;
+  font-family: "Montserrat";
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  box-shadow: 0 14px 40px rgba(255, 132, 25, 0.16);
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
-/* prettier modal action buttons */
+
+
+.car-modal .actions .buy:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 18px 45px rgba(255, 143, 44, 0.25);
+  background: linear-gradient(135deg, #ffd65b, #ff7b29);
+}
+
+.car-modal .actions .buy:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 10px 30px rgba(255, 143, 44, 0.18);
+}
+
+.car-modal .actions .buy::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transition: 0.6s;
+}
+
+.car-modal .actions .buy:hover::after {
+  left: 100%;
+}
+
 .car-modal .actions .wishlist,
 .car-modal .actions .close {
   display:inline-flex;
@@ -1337,7 +1345,7 @@ a:focus-visible {
   background: linear-gradient(90deg, rgba(139,59,255,0.12), rgba(255, 200, 35, 0.06));
 }
 
-/* active (saved) state for wishlist */
+
 .car-modal .actions .wishlist.active {
   background: linear-gradient(135deg,#ffbd39,#fd7e1c);
   color: #fff;
@@ -1345,10 +1353,10 @@ a:focus-visible {
   box-shadow: 0 14px 36px rgba(255,95,122,0.12);
 }
 
-/* icon sizing */
+
 .car-modal .actions .icon-svg { font-size:18px; width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; }
 
-/* visually-hidden helper for screen readers */
+
 .visually-hidden {
   position: absolute !important;
   height: 1px; width: 1px;
@@ -1357,11 +1365,11 @@ a:focus-visible {
 }
 
 
-/* small helpers */
+
 .icon-svg { font-size:16px; width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; color:#ffffff; }
 .kicker { color: rgba(255,255,255,0.62); font-weight:600; font-size:25.5px; }
 
-/* responsive */
+
 @media (max-width: 980px) {
   .car-modal { grid-template-columns: 1fr; padding:18px; gap:14px; max-width:920px; }
   .car-modal .main-image { height:320px; }
@@ -1371,20 +1379,17 @@ a:focus-visible {
 
 
 
-/* responsive */
+
 @media (max-width: 960px){
   .car-modal { grid-template-columns: 1fr; gap:16px; padding:18px; max-width:920px; }
   .car-modal .main-image { height: 320px; }
   .car-modal .title { font-size: 28px; }
   .car-modal .spec-list { grid-template-columns: 1fr; }
 }
-/* ---------- Modernized responsive styles & mobile-friendly modal ---------- */
-/* (paste into style.css — can be appended to the end) */
 
-/* Lightweight Reset for interactive elements */
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 
-/* Mobile header (hamburger) */
+
 .header-inner {
   display:flex;
   align-items:center;
@@ -1414,7 +1419,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   .header-hamburger { display:inline-grid; }
 }
 
-/* Simple nav-drawer */
+
 .nav-drawer {
   position: fixed;
   inset: 0 0 auto 100%;
@@ -1434,7 +1439,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 }
 .nav-drawer.closed { transform: translateX(110%); }
 
-/* Subtle backdrop for drawer */
+
 .nav-drawer-backdrop {
   position: fixed;
   inset:0;
@@ -1446,7 +1451,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 }
 .nav-drawer-backdrop.open { opacity:1; pointer-events:auto; }
 
-/* Hero fixes for small screens */
+
 .hero { height: calc(100vh - 72px); margin-top:72px; }
 @media (max-width:480px) {
   .hero { height: 72vh; margin-top:64px; }
@@ -1455,7 +1460,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   .cta-button { padding: 12px 18px; font-size:13px; }
 }
 
-/* ---------- Modal polish: full rewrite targeted at mobile UX ---------- */
+
 .car-modal-overlay {
   position: fixed;
   inset: 0;
@@ -1472,7 +1477,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 }
 .car-modal-overlay.open { display:flex; opacity:1; }
 
-/* modal shell */
+
 .car-modal {
   width: 100%;
   max-width: 1100px;
@@ -1490,7 +1495,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   will-change: transform;
 }
 
-/* mobile adjustments */
+
 @media (max-width:980px) {
   .car-modal {
     grid-template-columns: 1fr;
@@ -1502,13 +1507,11 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
     padding: 12px;
   }
   .car-modal .main-image { height: 40vh; min-height:260px; }
-  .car-modal .details { height: auto; overflow:auto; -webkit-overflow-scrolling: touch; padding: 6px 2px; }
+  .car-modal .details { height: auto; overflow:auto; -webkit-overflow-scrolling: touch; padding: 10px 2px; }
 }
 
-/* Prevent background scroll when modal open (used via JS by adding body.modal-open) */
 body.modal-open { overflow: hidden; touch-action: none; }
 
-/* thumbs: horizontal, touch-friendly */
 .car-modal .thumbs {
   display:flex;
   gap:12px;
@@ -1520,7 +1523,6 @@ body.modal-open { overflow: hidden; touch-action: none; }
 .car-modal .thumbs img { flex:0 0 auto; width:96px; height:64px; border-radius:10px; object-fit:cover; cursor:pointer; transition: transform .16s; }
 .car-modal .thumbs img.active { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); border:2px solid rgba(255,200,35,0.12); }
 
-/* Close button (consistent look) */
 .car-modal .car-modal-close {
   position:absolute;
   right:12px;
@@ -1538,17 +1540,14 @@ body.modal-open { overflow: hidden; touch-action: none; }
 }
 .car-modal .car-modal-close:active { transform: scale(.98); }
 
-/* Details scroll style (light & unobtrusive) */
 .car-modal .details { overflow:auto; -webkit-overflow-scrolling:touch; padding-right: 6px; }
 .car-modal .details::-webkit-scrollbar { width:6px; height:6px }
 .car-modal .details::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius:6px; }
 
-/* reduce heavy shadows & expensive effects on low-power devices */
 @media (prefers-reduced-motion: reduce) {
   .hero::before, .car-modal { transition: none !important; animation: none !important; }
 }
 
-/* ---------- STATIC HEADER LAYOUT (fixed top, no wrapping) ---------- */
 
 header {
   position: fixed;
@@ -1619,7 +1618,7 @@ header {
   align-items: center;
   gap: 15px;
   flex-shrink: 0;
-  white-space: nowrap; /* запобігає переносу */
+  white-space: nowrap; 
 }
 .contact-header svg {
   width: 20px;
@@ -1633,7 +1632,6 @@ header {
   font-size: 15px;
 }
 
-/* ---------- MOBILE BEHAVIOR ---------- */
 .header-hamburger {
   display: none;
   width: 44px;
@@ -1669,12 +1667,12 @@ header {
   .header-hamburger { display: inline-grid; }
 }
 
-/* ---------- Optional hover effect ---------- */
+
 .header-inner:hover .logo-icon {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
-/* ===== Responsive header + mobile menu ===== */
+
 .mobile-nav-toggle{
   display: none;
   background: transparent;
@@ -1692,10 +1690,9 @@ header {
   .mobile-nav-toggle { display: inline-flex; }
   nav { padding: 12px 16px; gap: 12px; }
   .logo { font-size: 18px; }
-  .contact-header { font-size: 13px; display: none; } /* сховати, щоб хедер не зміщувався */
+  .contact-header { font-size: 13px; display: none; } 
 }
 
-/* mobile expanded menu */
 #mainNav.mobile-open {
   position: fixed;
   top: 64px;
@@ -1713,11 +1710,9 @@ header {
 }
 #mainNav.mobile-open a { padding: 10px 12px; border-radius: 8px; }
 
-/* Ensure header doesn't hide content on small screens */
 .hero { margin-top: 72px; }
 @media (max-width:420px){ .hero { margin-top:68px; } }
 
-/* ===== Modal: modern, accessible, responsive ===== */
 .car-modal-overlay {
   position: fixed;
   inset: 0;
@@ -1735,7 +1730,6 @@ header {
   pointer-events: auto;
 }
 
-/* container */
 .car-modal {
   width: min(1100px, 96vw);
   background: linear-gradient(180deg, rgba(10,10,10,0.98), rgba(8,8,8,0.95));
@@ -1748,7 +1742,6 @@ header {
   max-height: 90vh;
 }
 
-/* Left: big image + thumbs */
 .gallery {
   display: flex;
   flex-direction: column;
@@ -1794,7 +1787,6 @@ header {
   backdrop-filter: blur(4px);
 }
 
-/* Thumbs */
 .thumbs {
   display: flex;
   gap: 10px;
@@ -1816,7 +1808,6 @@ header {
 .thumbs img:focus { outline: none; box-shadow: 0 4px 14px rgba(0,0,0,0.6); }
 .thumbs img.active { transform: scale(1.03); border-color: #FFD700; }
 
-/* Right: details */
 .details {
   padding: 18px;
   overflow: auto;
@@ -1824,7 +1815,7 @@ header {
   flex-direction: column;
   gap: 12px;
 }
-.car-modal .title { font-size: 20px; font-weight: 800; line-height: 1.1; margin-bottom: 4px; color: #fff; }
+.car-modal .title { font-family: 'Montserrat';font-size: px; font-weight: 800; line-height: 1.1; margin-bottom: 4px; color: #fff; padding: 12px;}
 .car-modal .subtitle { color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 6px; }
 .car-modal .badge { font-weight: 700; color: #0a0a0a; background: linear-gradient(135deg,#FFD700,#FFA500); padding: 6px 12px; border-radius: 12px; display:inline-block; }
 .spec-list { display: grid; gap: 8px; margin-top:6px; }
@@ -1832,14 +1823,13 @@ header {
 .spec-item .label { font-size:12px; color: #f4e7b0; font-weight:700; }
 .spec-item .value { font-size:14px; color: #fff; }
 
-/* Actions (Buy/Close) */
 .actions { margin-top:auto; display:flex; gap:10px; align-items:center; }
 .actions .buy {
   padding: 12px 16px;
   border-radius: 12px;
   background: linear-gradient(135deg,#FFD700,#FFA500);
   border: none;
-  font-weight: 800;
+  font-weight: 900;
   cursor: pointer;
 }
 .actions .close {
@@ -1851,7 +1841,6 @@ header {
   color: #fff;
 }
 
-/* small screens: stack */
 @media (max-width: 920px) {
   .car-modal { grid-template-columns: 1fr; width: min(920px, 96vw); max-height: 95vh; }
   .gallery { padding: 12px; }
@@ -1859,7 +1848,6 @@ header {
   .thumbs img { width: 72px; height: 52px; }
 }
 
-/* tiny screens */
 @media (max-width: 480px) {
   #mainNav.mobile-open { top: 58px; left: 6px; right: 6px; }
   .main-image-wrap { aspect-ratio: 4/3; }
@@ -1867,9 +1855,7 @@ header {
 }
 
 }
-/* Додайте ці стилі в кінець вашого style.css */
 
-/* ===== MOBILE MODAL IMPROVEMENTS ===== */
 @media (max-width: 980px) {
   .car-modal-overlay {
     padding: 0;
@@ -1933,7 +1919,6 @@ header {
     height: 50px;
   }
   
-  /* Close button positioning for mobile */
   .car-modal #carModalClose {
     position: absolute;
     top: 12px;
@@ -1943,7 +1928,6 @@ header {
     backdrop-filter: blur(4px);
   }
   
-  /* Swipe indicator */
   .car-modal::before {
     content: '';
     position: absolute;
@@ -1958,7 +1942,6 @@ header {
   }
 }
 
-/* ===== MOBILE HEADER IMPROVEMENTS ===== */
 @media (max-width: 968px) {
   header {
     padding: 0;
@@ -1981,7 +1964,6 @@ header {
     display: none;
   }
   
-  /* Mobile nav toggle button */
   .mobile-nav-toggle {
     display: flex;
     align-items: center;
@@ -1995,7 +1977,6 @@ header {
     cursor: pointer;
   }
   
-  /* Mobile expanded menu */
   #mainNav.mobile-open {
     position: fixed;
     top: 60px;
@@ -2023,7 +2004,6 @@ header {
     background: rgba(255, 255, 255, 0.03);
   }
   
-  /* Ensure header doesn't hide content */
   .hero {
     margin-top: 60px;
   }
@@ -2060,7 +2040,38 @@ header {
   }
 }
 
-/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}
+
+/* Consolidated modal overlay — place at the end of your CSS */
+.car-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* підніми, якщо треба, наприклад 2200 */
+  padding: 20px;
+  background: rgba(0,0,0,0.75) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+  transition: opacity .22s ease, visibility .22s;
+  pointer-events: none;
+}
+.car-modal-overlay.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Ensure html/body keep your dark background even when modal open */
+html, body {
+  height: 100%;
+  background-color: #000 !important;
+}
 body.modal-open {
   overflow: hidden !important;
   position: fixed;
