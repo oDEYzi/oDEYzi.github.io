@@ -10,7 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastActiveTrigger = null;
   let lastScrollY = 0;
 
-  if (!overlay || !modal) return;
+  if (!overlay || !modal) {
+    console.warn('Modal elements not found');
+    return;
+  }
 
   // ===== SCROLL LOCK UTILITIES =====
   function lockBodyScroll() {
@@ -19,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.style.top = `-${lastScrollY}px`;
+    document.body.style.width = '100%';
     document.documentElement.style.overflow = 'hidden';
   }
 
@@ -26,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.position = '';
     document.body.style.left = '';
     document.body.style.right = '';
+    document.body.style.width = '';
     const top = document.body.style.top || '';
     document.body.style.top = '';
     document.documentElement.style.overflow = '';
@@ -109,36 +114,45 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Fill modal
-      overlay.querySelector('#carModalTitle').textContent = title;
-      overlay.querySelector('#carModalBadge').textContent = badge;
-      overlay.querySelector('#carModalPrice').textContent = price || '';
+      const modalTitle = overlay.querySelector('#carModalTitle');
+      const modalBadge = overlay.querySelector('#carModalBadge');
+      const modalPrice = overlay.querySelector('#carModalPrice');
+      
+      if (modalTitle) modalTitle.textContent = title;
+      if (modalBadge) modalBadge.textContent = badge;
+      if (modalPrice) modalPrice.textContent = price || '';
 
       // Specs
       const specList = overlay.querySelector('#carModalSpecs');
-      specList.innerHTML = '';
-      Array.from(card.querySelectorAll('.spec-item')).slice(0, 8).forEach(si => {
-        const label = si.textContent.trim();
-        const el = document.createElement('div');
-        el.className = 'spec-item';
-        el.innerHTML = `<div class="icon" aria-hidden="true">${si.querySelector('svg')?.outerHTML || ''}</div><div style="flex:1"><span class="label">Деталь</span><span class="value">${label}</span></div>`;
-        specList.appendChild(el);
-      });
+      if (specList) {
+        specList.innerHTML = '';
+        Array.from(card.querySelectorAll('.spec-item')).slice(0, 8).forEach(si => {
+          const label = si.textContent.trim();
+          const el = document.createElement('div');
+          el.className = 'spec-item';
+          el.innerHTML = `<div class="icon" aria-hidden="true">${si.querySelector('svg')?.outerHTML || ''}</div><div style="flex:1"><span class="label">Деталь</span><span class="value">${label}</span></div>`;
+          specList.appendChild(el);
+        });
+      }
 
       // Thumbnails
-      thumbs.innerHTML = '';
-      imgs.forEach((s, i) => {
-        const t = document.createElement('img');
-        t.src = s;
-        t.alt = title + ' ' + (i + 1);
-        if (i === 0) t.classList.add('active');
-        t.addEventListener('click', () => {
-          mainImg.src = s;
-          thumbs.querySelectorAll('img').forEach(x => x.classList.remove('active'));
-          t.classList.add('active');
+      if (thumbs) {
+        thumbs.innerHTML = '';
+        imgs.forEach((s, i) => {
+          const t = document.createElement('img');
+          t.src = s;
+          t.alt = title + ' ' + (i + 1);
+          if (i === 0) t.classList.add('active');
+          t.addEventListener('click', () => {
+            if (mainImg) mainImg.src = s;
+            thumbs.querySelectorAll('img').forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+          });
+          thumbs.appendChild(t);
         });
-        thumbs.appendChild(t);
-      });
-      mainImg.src = imgs[0] || '';
+      }
+      
+      if (mainImg && imgs[0]) mainImg.src = imgs[0];
       
       openModal();
     });
@@ -225,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (!overlay.classList.contains('open')) return;
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      if (!thumbs) return;
       const imgs = Array.from(thumbs.querySelectorAll('img'));
       if (!imgs.length) return;
       const active = thumbs.querySelector('img.active') || imgs[0];
@@ -258,11 +273,42 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    dback?.addEventListener('click', () => {
-      drawer.classList.add('closed');
-      dback.classList.remove('open');
-      unlockBodyScroll();
+    if (dback) {
+      dback.addEventListener('click', () => {
+        drawer.classList.add('closed');
+        dback.classList.remove('open');
+        unlockBodyScroll();
+      });
+    }
+  }
+
+  // ===== MOBILE NAV TOGGLE (альтернативний варіант) =====
+  const mobileBtn = document.querySelector('.mobile-nav-toggle');
+  const mainNav = document.getElementById('mainNav');
+  
+  if (mobileBtn && mainNav) {
+    mobileBtn.addEventListener('click', () => {
+      const expanded = mobileBtn.getAttribute('aria-expanded') === 'true';
+      mobileBtn.setAttribute('aria-expanded', String(!expanded));
+      mainNav.classList.toggle('mobile-open');
+      const icon = mobileBtn.querySelector('i');
+      if (icon) icon.classList.toggle('bi-x-lg');
+      
+      if (!expanded) {
+        lockBodyScroll();
+      } else {
+        unlockBodyScroll();
+      }
     });
+    
+    // Close when clicking a link
+    mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mainNav.classList.remove('mobile-open');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      unlockBodyScroll();
+      const icon = mobileBtn.querySelector('i');
+      if (icon) icon.classList.remove('bi-x-lg');
+    }));
   }
 });
 
@@ -284,7 +330,19 @@ document.addEventListener('click', (e) => {
   const backdrop = document.querySelector('.nav-drawer-backdrop');
   if (drawer && !drawer.classList.contains('closed')) {
     drawer.classList.add('closed');
-    backdrop?.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+  }
+
+  // Close mobile nav if open
+  const mainNav = document.getElementById('mainNav');
+  if (mainNav && mainNav.classList.contains('mobile-open')) {
+    mainNav.classList.remove('mobile-open');
+    const mobileBtn = document.querySelector('.mobile-nav-toggle');
+    if (mobileBtn) {
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      const icon = mobileBtn.querySelector('i');
+      if (icon) icon.classList.remove('bi-x-lg');
+    }
   }
 
   // Smooth scroll
@@ -294,3 +352,4 @@ document.addEventListener('click', (e) => {
     behavior: 'smooth'
   });
 });
+
